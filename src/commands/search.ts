@@ -1,4 +1,5 @@
 import { Command } from 'commander';
+import ora from 'ora';
 import { loadProjectConfig } from '../lib/config.js';
 import { OmnusApiClient } from '../lib/api-client.js';
 
@@ -38,18 +39,28 @@ async function runSearch(query: string, options: SearchOptions): Promise<void> {
   const config = loadProjectConfig();
   const client = new OmnusApiClient(config.apiUrl, config.apiKey);
 
-  const results = await client.search(query, {
-    scope: options.scope,
-    kind: options.kind,
-    limit: parseInt(options.limit, 10),
-  });
+  const spinner = ora(`Searching for "${query}"`).start();
 
-  if (!results.records || results.records.length === 0) {
-    console.log('No results found.');
+  let results;
+  try {
+    results = await client.search(query, {
+      scope: options.scope,
+      kind: options.kind,
+      limit: parseInt(options.limit, 10),
+    });
+  } catch (error) {
+    spinner.fail(`Search failed: ${error instanceof Error ? error.message : error}`);
+    process.exit(1);
     return;
   }
 
-  console.log(`Found ${results.records.length} result(s):\n`);
+  if (!results.records || results.records.length === 0) {
+    spinner.info('No results found.');
+    return;
+  }
+
+  spinner.succeed(`Found ${results.records.length} result(s)`);
+  console.log('');
 
   for (const record of results.records) {
     const confidence = Math.round((record.confidence || 0) * 100);

@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import ora from 'ora';
 import { detectProject } from '../lib/project-detector.js';
 import { loadGlobalConfig } from '../lib/config.js';
 import { OmnusApiClient } from '../lib/api-client.js';
@@ -63,21 +64,19 @@ async function runInit(options: InitOptions): Promise<void> {
   // Verify project exists in Omnus (unless --skip-verify)
   let verified = false;
   if (!options.skipVerify) {
+    const spinner = ora(`Verifying project against ${apiUrl}`).start();
     try {
       const client = new OmnusApiClient(apiUrl, globalConfig.apiKey);
       const project = await client.verifyProject(projectId);
 
       if (project) {
-        console.log(`Verified: project "${projectId}" exists in Omnus.`);
+        spinner.succeed(`Project "${projectId}" verified`);
         verified = true;
       } else {
-        console.warn(`Warning: project "${projectId}" not found in Omnus.`);
-        console.warn('  The first `terso sync` will fail until this project is registered.');
-        console.warn('  Use `terso init --project-id <correct-id>` to specify the right ID.');
+        spinner.warn(`Project "${projectId}" not found in Omnus — sync will fail until it is registered`);
       }
     } catch {
-      console.warn('Warning: could not verify project against Omnus API.');
-      console.warn('  Continuing with unverified project ID.');
+      spinner.warn('Could not verify project — continuing with unverified project ID');
     }
   }
 
@@ -102,14 +101,12 @@ async function runInit(options: InitOptions): Promise<void> {
   fs.writeFileSync(path.join(tersoDir, '.gitignore'), GITIGNORE_CONTENT);
 
   console.log('');
-  console.log('Terso initialized successfully.');
-  console.log(`  Directory: ${tersoDir}`);
+  console.log('Terso initialized.');
   console.log(`  Project ID: ${projectId}`);
-  console.log(`  API URL: ${apiUrl}`);
-  console.log(`  Verified: ${verified ? 'yes' : 'no'}`);
+  console.log(`  API URL:    ${apiUrl}`);
   console.log('');
   console.log('Next steps:');
-  console.log('  terso sync     — pull project context from Omnus');
-  console.log('  terso capture   — send knowledge to Omnus');
-  console.log('  terso doctor   — verify configuration and connectivity');
+  console.log('  terso sync    — pull project context from Omnus');
+  console.log('  terso capture — send knowledge to Omnus');
+  console.log('  terso doctor  — verify configuration and connectivity');
 }

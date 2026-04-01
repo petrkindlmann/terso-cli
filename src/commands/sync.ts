@@ -1,4 +1,5 @@
 import { Command } from 'commander';
+import ora from 'ora';
 import { loadProjectConfig } from '../lib/config.js';
 import { OmnusApiClient } from '../lib/api-client.js';
 import { writeContextFiles } from '../lib/file-writer.js';
@@ -29,46 +30,43 @@ async function runSync(options: SyncOptions): Promise<void> {
   const config = loadProjectConfig();
   const client = new OmnusApiClient(config.apiUrl, config.apiKey);
 
-  console.log(`Syncing context for project: ${config.projectId}`);
-  console.log(`  API: ${config.apiUrl}`);
+  const spinner = ora(`Syncing context for ${config.projectId}`).start();
 
-  // Fetch context from API
-  const context = await client.exportContext(config.projectId, {
-    force: options.force,
-  });
+  let context;
+  try {
+    context = await client.exportContext(config.projectId, { force: options.force });
+  } catch (error) {
+    spinner.fail(`Sync failed: ${error instanceof Error ? error.message : error}`);
+    process.exit(1);
+    return;
+  }
 
-  // API returns files as Record<string, string> (path -> content)
-  // Convert to the array format that writeContextFiles expects
   const filesMap = context.files ?? {};
   const fileEntries = Object.entries(filesMap);
 
   if (fileEntries.length === 0) {
-    console.log('No context files available for this project.');
+    spinner.info('No context files available for this project.');
     return;
   }
 
   if (options.dryRun) {
+    spinner.stop();
     console.log(`Would write ${fileEntries.length} file(s):`);
-    for (const [path] of fileEntries) {
-      console.log(`  ${path}`);
+    for (const [p] of fileEntries) {
+      console.log(`  ${p}`);
     }
     return;
   }
 
-  // Write files to .terso/generated/
-  // Server owns final content (including frontmatter). CLI writes as-is.
-  const filesForWriter = fileEntries.map(([filePath, content]) => ({
-    path: filePath,
-    content,
-  }));
+  const filesForWriter = fileEntries.map(([filePath, content]) => ({ path: filePath, content }));
   const written = writeContextFiles(filesForWriter);
 
-  console.log(`Synced ${written} changed file(s) to .terso/generated/`);
+  spinner.succeed(`Synced ${written} changed file(s) of ${fileEntries.length} total`);
 
   // Flush offline captures if any
   const pending = pendingCaptureCount();
   if (pending > 0) {
-    console.log(`\nFlushing ${pending} offline capture(s)...`);
+    const flushSpinner = ora(`Flushing ${pending} offline capture(s)`).start();
     const captures = readOfflineCaptures();
     let flushed = 0;
 
@@ -81,18 +79,16 @@ async function runSync(options: SyncOptions): Promise<void> {
         );
         flushed++;
       } catch (err) {
-        console.error(`  Failed to flush capture from ${capture.capturedAt}: ${(err as Error).message}`);
-        break; // Stop flushing on first failure to preserve order
+        flushSpinner.fail(`Failed at capture ${flushed + 1}: ${(err as Error).message}`);
+        break;
       }
     }
 
     if (flushed === captures.length) {
       clearOfflineCaptures();
-      console.log(`  All ${flushed} offline captures flushed.`);
+      flushSpinner.succeed(`All ${flushed} offline capture(s) flushed`);
     } else {
-      console.warn(`  ${flushed}/${captures.length} captures flushed. Remaining will retry on next sync.`);
+      flushSpinner.warn(`${flushed}/${captures.length} captures flushed — remainder will retry on next sync`);
     }
   }
-
-  console.log(`Last sync: ${new Date().toISOString()}`);
 }

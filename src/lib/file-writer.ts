@@ -81,7 +81,7 @@ export function cleanStaleFiles(currentFiles: Set<string>): number {
 
     const relativePath = path.relative(
       generatedDir,
-      path.join(entry.parentPath || entry.path, entry.name)
+      path.join(entry.parentPath, entry.name)
     );
 
     if (!currentFiles.has(relativePath)) {

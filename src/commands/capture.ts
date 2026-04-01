@@ -1,5 +1,6 @@
 import { Command } from 'commander';
 import { execSync } from 'node:child_process';
+import ora from 'ora';
 import { loadProjectConfig } from '../lib/config.js';
 import { OmnusApiClient } from '../lib/api-client.js';
 import { appendOfflineCapture, pendingCaptureCount } from '../lib/offline-store.js';
@@ -62,21 +63,21 @@ async function runCapture(text: string | undefined, options: CaptureOptions): Pr
   const projectHint = options.project || config.projectId;
   const scopeHint = options.scope as 'shared' | 'project' | 'personal' | 'mixed' | undefined;
 
-  console.log(`Capturing to project: ${projectHint}`);
+  const spinner = ora(`Capturing to ${projectHint}`).start();
 
   // Try API with retry, then queue offline on terminal failure
   let lastError: Error | undefined;
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    if (attempt > 0) {
+      spinner.text = `Retrying (${attempt}/${MAX_RETRIES})...`;
+    }
     try {
       const result = await client.capture(text, projectHint, scopeHint);
-      console.log('Queued for processing.');
-      console.log(`  Ingestion ID: ${result.ingestionId}`);
-      console.log(`  Status: ${result.status}`);
+      spinner.succeed(`Queued for processing  (id: ${result.ingestionId})`);
 
-      // Show pending offline count if any
       const pending = pendingCaptureCount();
       if (pending > 0) {
-        console.log(`\n  ${pending} offline capture(s) pending. Run \`terso sync\` to flush.`);
+        console.log(`  ${pending} offline capture(s) pending — run \`terso sync\` to flush`);
       }
       return;
     } catch (err) {
@@ -88,8 +89,7 @@ async function runCapture(text: string | undefined, options: CaptureOptions): Pr
   }
 
   // All retries failed — queue offline
-  console.warn(`API unavailable after ${MAX_RETRIES + 1} attempts: ${lastError?.message}`);
-  console.warn('Saving capture offline for later sync.');
+  spinner.warn(`API unavailable after ${MAX_RETRIES + 1} attempts — saving offline`);
 
   appendOfflineCapture({
     text,
@@ -99,6 +99,5 @@ async function runCapture(text: string | undefined, options: CaptureOptions): Pr
   });
 
   const pending = pendingCaptureCount();
-  console.log(`Capture saved offline. ${pending} pending capture(s) total.`);
-  console.log('Run `terso sync` to flush when connectivity returns.');
+  console.log(`  ${pending} offline capture(s) queued — run \`terso sync\` to flush when connectivity returns`);
 }

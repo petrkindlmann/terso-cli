@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import ora from 'ora';
 import { loadGlobalConfig, loadProjectConfig } from '../lib/config.js';
 import { OmnusApiClient } from '../lib/api-client.js';
 
@@ -28,35 +29,31 @@ interface CheckResult {
 }
 
 async function runDoctor(): Promise<void> {
-  const results: CheckResult[] = [];
+  console.log('Terso Doctor\n');
 
-  console.log('Terso Doctor');
-  console.log('============\n');
+  const checks: Array<() => CheckResult | Promise<CheckResult>> = [
+    checkGlobalConfig,
+    checkProjectInit,
+    checkProjectConfig,
+    checkGeneratedDir,
+    checkGitIgnore,
+    checkApiConnectivity,
+  ];
 
-  // Check 1: Global config
-  results.push(checkGlobalConfig());
-
-  // Check 2: Project initialization
-  results.push(checkProjectInit());
-
-  // Check 3: Project config validity
-  results.push(checkProjectConfig());
-
-  // Check 4: Generated directory permissions
-  results.push(checkGeneratedDir());
-
-  // Check 5: Git ignore
-  results.push(checkGitIgnore());
-
-  // Check 6: API connectivity
-  results.push(await checkApiConnectivity());
-
-  // Print results
   let hasFailures = false;
-  for (const result of results) {
-    const icon = result.status === 'ok' ? '[OK]' : result.status === 'warn' ? '[WARN]' : '[FAIL]';
-    console.log(`  ${icon} ${result.name}: ${result.message}`);
-    if (result.status === 'fail') hasFailures = true;
+
+  for (const check of checks) {
+    const spinner = ora({ text: '...', isSilent: false }).start();
+    const result = await check();
+    const message = `${result.name}: ${result.message}`;
+    if (result.status === 'ok') {
+      spinner.succeed(message);
+    } else if (result.status === 'warn') {
+      spinner.warn(message);
+    } else {
+      spinner.fail(message);
+      hasFailures = true;
+    }
   }
 
   console.log('');

@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import ora from 'ora';
 import { loadProjectConfig, ProjectConfig } from '../lib/config.js';
 import { OmnusApiClient } from '../lib/api-client.js';
 
@@ -65,15 +66,16 @@ async function runStatus(): Promise<void> {
 
   // Try to get remote status
   console.log('');
+  const spinner = ora('Fetching remote status').start();
   try {
     const client = new OmnusApiClient(config.apiUrl, config.apiKey);
     const remoteStatus = await client.getStatus(config.projectId);
-    console.log('Remote status:');
-    console.log(`  Fragments: ${remoteStatus.fragmentCount ?? 'unknown'}`);
+    spinner.succeed('Remote status');
+    console.log(`  Fragments:      ${remoteStatus.fragmentCount ?? 'unknown'}`);
     console.log(`  Last ingestion: ${remoteStatus.lastIngestion ?? 'none'}`);
-    console.log(`  Last export: ${remoteStatus.lastExport ?? 'never'}`);
+    console.log(`  Last export:    ${remoteStatus.lastExport ?? 'never'}`);
   } catch {
-    console.log('Remote status: unavailable (API not reachable)');
+    spinner.warn('Remote status unavailable (API not reachable)');
   }
 }
 
