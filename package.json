@@ -10,8 +10,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/petrkindlmann/omnus",
-    "directory": "cli"
+    "url": "https://github.com/petrkindlmann/terso-cli"
   },
   "keywords": ["cli", "knowledge", "context", "ai", "agent", "omnus"],
   "files": ["dist", "bin"],

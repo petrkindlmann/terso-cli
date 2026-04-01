@@ -72,7 +72,7 @@ export function loadProjectConfig(): ProjectConfig {
 
   return {
     projectId: projectConfig.projectId as string,
-    apiUrl: (projectConfig.apiUrl as string) || globalConfig.apiUrl || 'http://localhost:3000',
+    apiUrl: (projectConfig.apiUrl as string) || globalConfig.apiUrl || 'https://omnus.dev',
     apiKey: process.env.TERSO_API_TOKEN || (projectConfig.apiKey as string) || globalConfig.apiKey,
     detectedFrom: projectConfig.detectedFrom as string | undefined,
     createdAt: projectConfig.createdAt as string | undefined,

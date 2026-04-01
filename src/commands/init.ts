@@ -56,7 +56,7 @@ async function runInit(options: InitOptions): Promise<void> {
 
   // Resolve API URL: explicit flag > global config > default
   const globalConfig = loadGlobalConfig();
-  const apiUrl = options.apiUrl || globalConfig.apiUrl || 'http://localhost:3000';
+  const apiUrl = options.apiUrl || globalConfig.apiUrl || 'https://omnus.dev';
 
   console.log(`Detected project: "${projectId}" (from ${detected.source})`);
 
