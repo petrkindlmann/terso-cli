@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/petr/projects/omnus/cli/hooks/omnus-session-observer.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
