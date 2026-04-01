@@ -1,6 +1,6 @@
 {
   "name": "terso-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Terso CLI — sync project knowledge from Omnus",
   "bin": {
     "terso": "./bin/terso.js"
