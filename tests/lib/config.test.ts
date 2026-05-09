@@ -153,7 +153,7 @@ describe('loadProjectConfig', () => {
     const { loadProjectConfig } = await importConfig();
     const result = loadProjectConfig();
 
-    expect(result.apiUrl).toBe('http://localhost:3000');
+    expect(result.apiUrl).toBe('https://omnus.dev');
   });
 });
 

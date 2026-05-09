@@ -26,6 +26,11 @@ function buildProgram(register: (p: Command) => void): Command {
   return program;
 }
 
+// ora spinner status symbols
+const OK = '✔'; // ✔
+const WARN = '⚠'; // ⚠
+const FAIL = '✖'; // ✖
+
 describe('doctor command', () => {
   let consoleLogs: string[];
 
@@ -36,6 +41,16 @@ describe('doctor command', () => {
       consoleLogs.push(args.join(' '));
     });
     vi.spyOn(console, 'error').mockImplementation(() => {});
+    // ora spinners write directly to stdout/stderr (bypassing console.log).
+    // Capture those writes too so doctor result lines are visible to assertions.
+    vi.spyOn(process.stdout, 'write').mockImplementation((chunk: unknown) => {
+      consoleLogs.push(typeof chunk === 'string' ? chunk : String(chunk));
+      return true;
+    });
+    vi.spyOn(process.stderr, 'write').mockImplementation((chunk: unknown) => {
+      consoleLogs.push(typeof chunk === 'string' ? chunk : String(chunk));
+      return true;
+    });
     mockFetch.mockReset();
   });
 
@@ -79,7 +94,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const globalConfigLine = consoleLogs.find((l) => l.includes('Global config'));
-      expect(globalConfigLine).toContain('[OK]');
+      expect(globalConfigLine).toContain(OK);
       expect(globalConfigLine).toContain('Found with API key');
     });
 
@@ -108,7 +123,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const globalConfigLine = consoleLogs.find((l) => l.includes('Global config'));
-      expect(globalConfigLine).toContain('[WARN]');
+      expect(globalConfigLine).toContain(WARN);
       expect(globalConfigLine).toContain('no API key');
     });
 
@@ -134,7 +149,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const globalConfigLine = consoleLogs.find((l) => l.includes('Global config'));
-      expect(globalConfigLine).toContain('[WARN]');
+      expect(globalConfigLine).toContain(WARN);
     });
   });
 
@@ -159,7 +174,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const projectInitLine = consoleLogs.find((l) => l.includes('Project init'));
-      expect(projectInitLine).toContain('[OK]');
+      expect(projectInitLine).toContain(OK);
     });
 
     it('reports FAIL when .terso/ does not exist', async () => {
@@ -172,7 +187,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const projectInitLine = consoleLogs.find((l) => l.includes('Project init'));
-      expect(projectInitLine).toContain('[FAIL]');
+      expect(projectInitLine).toContain(FAIL);
     });
   });
 
@@ -197,7 +212,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const apiLine = consoleLogs.find((l) => l.includes('API connectivity'));
-      expect(apiLine).toContain('[OK]');
+      expect(apiLine).toContain(OK);
       expect(apiLine).toContain('Connected to');
     });
 
@@ -221,7 +236,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const apiLine = consoleLogs.find((l) => l.includes('API connectivity'));
-      expect(apiLine).toContain('[FAIL]');
+      expect(apiLine).toContain(FAIL);
       expect(apiLine).toContain('Cannot reach API');
     });
   });
@@ -250,7 +265,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const gitignoreLine = consoleLogs.find((l) => l.includes('Git ignore'));
-      expect(gitignoreLine).toContain('[OK]');
+      expect(gitignoreLine).toContain(OK);
     });
 
     it('reports WARN when .gitignore exists but does not exclude generated/', async () => {
@@ -276,7 +291,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const gitignoreLine = consoleLogs.find((l) => l.includes('Git ignore'));
-      expect(gitignoreLine).toContain('[WARN]');
+      expect(gitignoreLine).toContain(WARN);
       expect(gitignoreLine).toContain('does not exclude generated/');
     });
   });
