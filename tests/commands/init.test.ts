@@ -81,7 +81,7 @@ describe('init command', () => {
 
     const written = JSON.parse(projectJsonCall![1] as string);
     expect(written.projectId).toBeDefined();
-    expect(written.apiUrl).toBe('http://localhost:3000');
+    expect(written.apiUrl).toBe('https://omnus.dev');
     expect(written.createdAt).toBeDefined();
     expect(written).toHaveProperty('verified');
   });
@@ -149,9 +149,38 @@ describe('init command', () => {
 
     await program.parseAsync(['init', '--project-id', 'test-proj'], { from: 'user' });
 
-    expect(consoleSpy).toHaveBeenCalledWith('Terso initialized successfully.');
+    expect(consoleSpy).toHaveBeenCalledWith('Terso initialized.');
     expect(consoleSpy).toHaveBeenCalledWith(
       expect.stringContaining('Project ID: test-proj')
     );
+  });
+
+  it('scaffolds AGENTS.md at project root when missing', async () => {
+    const { registerInitCommand } = await importInit();
+    const program = buildProgram(registerInitCommand);
+
+    await program.parseAsync(['init'], { from: 'user' });
+
+    const agentsCall = mockedFs.writeFileSync.mock.calls.find(
+      (call) => String(call[0]).endsWith('AGENTS.md')
+    );
+    expect(agentsCall).toBeDefined();
+    expect(String(agentsCall![1])).toContain('terso emit');
+  });
+
+  it('does not overwrite AGENTS.md if it already exists', async () => {
+    mockedFs.existsSync.mockImplementation((p) =>
+      String(p).endsWith('AGENTS.md')
+    );
+
+    const { registerInitCommand } = await importInit();
+    const program = buildProgram(registerInitCommand);
+
+    await program.parseAsync(['init'], { from: 'user' });
+
+    const agentsCall = mockedFs.writeFileSync.mock.calls.find(
+      (call) => String(call[0]).endsWith('AGENTS.md')
+    );
+    expect(agentsCall).toBeUndefined();
   });
 });

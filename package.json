@@ -1,7 +1,7 @@
 {
   "name": "terso-cli",
-  "version": "0.2.0",
-  "description": "Terso CLI — sync project knowledge from Omnus",
+  "version": "0.3.0",
+  "description": "Terso CLI — compile AGENTS.md into per-agent configs and sync project knowledge from Omnus",
   "bin": {
     "terso": "./bin/terso.js"
   },
@@ -14,7 +14,11 @@
   },
   "keywords": [
     "cli",
-    "knowledge",
+    "agents.md",
+    "claude-code",
+    "cursor",
+    "copilot",
+    "mcp",
     "context",
     "ai",
     "agent",
@@ -32,6 +36,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "commander": "^12.0.0",
     "ora": "^9.3.0"
   },

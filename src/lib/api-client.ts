@@ -3,6 +3,8 @@
  * Handles all communication between the CLI and the Omnus backend.
  */
 
+import { VERSION } from './version.js';
+
 interface ExportContextOptions {
   force?: boolean;
 }
@@ -161,7 +163,7 @@ export class OmnusApiClient {
   ): Promise<unknown> {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      'User-Agent': 'terso-cli/0.1.0',
+      'User-Agent': `terso-cli/${VERSION}`,
     };
 
     if (this.apiKey) {

@@ -13,6 +13,30 @@ const GITIGNORE_CONTENT = `# Terso generated context (disposable, re-synced from
 generated/
 `;
 
+const AGENTS_MD_TEMPLATE = `# Agent instructions
+
+Single source of truth for AI agent behavior in this project.
+Run \`terso emit\` to compile this file into per-agent configs
+(\`CLAUDE.md\`, \`.cursorrules\`, \`.github/copilot-instructions.md\`).
+
+## Project overview
+
+<!-- One paragraph: what this project is and who uses it. -->
+
+## Conventions
+
+- <!-- e.g. Use TypeScript strict mode. -->
+- <!-- e.g. All public functions must have JSDoc. -->
+
+## Commands
+
+- <!-- e.g. \`npm test\` runs the full suite. -->
+
+## Don'ts
+
+- <!-- e.g. Never commit to main directly. -->
+`;
+
 export function registerInitCommand(program: Command): void {
   program
     .command('init')
@@ -100,12 +124,24 @@ async function runInit(options: InitOptions): Promise<void> {
   // Write .gitignore inside .terso/
   fs.writeFileSync(path.join(tersoDir, '.gitignore'), GITIGNORE_CONTENT);
 
+  // Scaffold AGENTS.md if missing — single source for `terso emit`.
+  const agentsPath = path.join(cwd, 'AGENTS.md');
+  let agentsScaffolded = false;
+  if (!fs.existsSync(agentsPath)) {
+    fs.writeFileSync(agentsPath, AGENTS_MD_TEMPLATE);
+    agentsScaffolded = true;
+  }
+
   console.log('');
   console.log('Terso initialized.');
   console.log(`  Project ID: ${projectId}`);
   console.log(`  API URL:    ${apiUrl}`);
+  if (agentsScaffolded) {
+    console.log('  AGENTS.md:  scaffolded at project root');
+  }
   console.log('');
   console.log('Next steps:');
+  console.log('  terso emit    — compile AGENTS.md into per-agent config files');
   console.log('  terso sync    — pull project context from Omnus');
   console.log('  terso capture — send knowledge to Omnus');
   console.log('  terso doctor  — verify configuration and connectivity');

@@ -58,7 +58,7 @@ describe('OmnusApiClient', () => {
         expect.objectContaining({
           headers: expect.objectContaining({
             'Authorization': 'Bearer sk-test-key',
-            'User-Agent': 'terso-cli/0.1.0',
+            'User-Agent': expect.stringMatching(/^terso-cli\/\d+\.\d+\.\d+$/),
           }),
         })
       );
