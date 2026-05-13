@@ -43,7 +43,9 @@ The canonical spec for Surfaces B lives at `/Users/petr/projects/omnus/docs/11-c
 
 ## Goal state (definition of done for this milestone)
 
-The current milestone `v1.0-launch` ships **a polished, trustworthy, broadly discoverable v1.0** that drives Omnus signups and seeds long-term virality in the AI-coding-tools community.
+> **Revised after Codex review (2026-05-13):** the milestone is now scoped to **Surface A only** (offline `terso emit` + `emit --check` + docs + CI + GitHub Action). Surface B (`terso mcp`, `terso sync`, `terso capture`, `terso search` against production Omnus) is deferred to a follow-on milestone `v1.1-omnus-connected`. This decouples the OSS wedge from Omnus's multi-tenant work and lets the CLI ship and gather adoption while the SaaS finishes its own pre-launch work.
+
+The current milestone `v1.0-launch` ships **a polished, trustworthy, broadly discoverable v1.0 of Terso CLI's offline surface** that drives Omnus signups (via README CTA) and seeds long-term virality in the AI-coding-tools community.
 
 See `milestones/v1.0-launch/GOAL.md` for the precise definition. Summary:
 

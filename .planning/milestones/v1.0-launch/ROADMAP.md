@@ -26,22 +26,28 @@ Phase 07 (Content cadence) starts during 05 and continues indefinitely.
 
 This roadmap aligns with Omnus's `v1.0-public-launch`. **The hard sync point is:** Terso CLI v1.0 ships *before* Omnus's public launch, ideally 1–3 weeks earlier, so the wedge is established when the press push lands. See `/Users/petr/projects/omnus/.planning/CROSS-REPO.md`.
 
+> **Codex Round 1 Review Applied (2026-05-13):** the milestone is scoped to **Surface A only** (offline `emit` + `emit --check` + docs + CI + GitHub Action). Surface B (`mcp`, `sync`, `capture`, `search` against production Omnus) ships in a follow-on milestone `v1.1-omnus-connected`. This decouples the OSS wedge from Omnus's multi-tenant work — Codex correctly observed that binding v1.0 to Omnus production behavior creates a blocking cross-repo dependency.
+
 ---
 
-## Phase 01 — Feature completeness
+## Phase 01 — Feature completeness (Surface A scope)
 
 **Why this is first.** A polished v1.0 cannot have advertised commands that don't work or undocumented gaps. The repo currently lists 9 commands; not all are fully wired.
 
-**What ships.**
+**Codex Round 1 Review Applied:** scope narrowed to Surface A. Surface B work (`mcp`, `sync`, `capture`, `search` production-ready) moves to v1.1.
+
+**What ships (Surface A).**
 - `terso install-hook` command implemented and tested. Spec inherits from `/Users/petr/projects/omnus/docs/11-cli-agent-integration.md`.
-- Every command's flags audited against `--help` output; gaps closed.
+- `terso emit`, `terso init`, `terso doctor`, `terso watch`, `terso status`, `terso compile` audited against `--help`; gaps closed.
 - `terso emit` fully offline — no network calls, no auth prompt, no leakage of Omnus environment when not signed in.
-- `terso doctor` exits 0 on a green machine and produces a categorized, actionable diagnostic on a broken one. The diagnostic includes Node version, npm version, install path, presence of expected target files, and Omnus auth state.
+- `terso doctor` exits 0 on a green machine and produces a categorized, actionable diagnostic on a broken one.
 - `terso --version` reports the actual installed version. No hard-coded strings.
 - `terso emit --check` is a stable CI primitive with documented exit codes (`0` = no changes, `1` = changes required, `2` = error).
-- `terso mcp` exposes the three MCP tools (`terso_get_context`, `terso_search`, `terso_capture`) per spec. Clean error messages when Omnus auth is missing.
 - `terso watch` re-emits cleanly without resource leaks.
-- `terso sync` writes `.terso/generated/` into project repos and updates `.gitignore` per spec.
+
+**What ships in stub form only (Surface B, full implementation deferred to v1.1).**
+- `terso mcp`, `terso sync`, `terso capture`, `terso search`, `terso auth` keep their existing implementations. They are not removed. They print a "Surface B is in beta — see v1.1 milestone" notice when invoked, and the `--help` text labels them clearly.
+- The mock-API integration test from Phase 01's original SPEC is implemented as a v1.0 smoke test; full Omnus-production integration is v1.1 work.
 
 **Satisfies in `GOAL.md`:** the entire "Feature completeness" block.
 
@@ -218,14 +224,16 @@ This roadmap aligns with Omnus's `v1.0-public-launch`. **The hard sync point is:
 
 ## Hard sync points with Omnus
 
-(See `/Users/petr/projects/omnus/.planning/CROSS-REPO.md` for the canonical reference.)
+(See `/Users/petr/projects/omnus/.planning/CROSS-REPO.md` for the canonical reference. Revised after Codex review.)
 
 | Sync point | This roadmap | Omnus roadmap |
 |---|---|---|
-| `terso mcp` works against production Omnus | Phase 01 | Phase 01 (multi-tenant) |
 | CLI v1.0 ships ≥1 week before Omnus public launch | Phase 05 + release | Phase 07 |
 | Content cadence aligned for cross-promotion | Phase 07 | Phase 05 + 06 + 08 |
 | Viral artifact (if A) referenced from Omnus blog | Phase 06 | Phase 05 |
+| `terso mcp` works against production Omnus | **v1.1 milestone** | Omnus Phase 01 (multi-tenant) + 02b (production billing) |
+
+The Surface A v1.0 scope **does not depend on Omnus phases 01 or 02b** — only the v1.1 connected milestone does. This was Codex's most consequential structural critique.
 
 ---
 
@@ -235,6 +243,21 @@ This roadmap aligns with Omnus's `v1.0-public-launch`. **The hard sync point is:
 
 ---
 
+---
+
+## Codex strategic review applied
+
+Round 1 of cross-AI review (Codex, via codex-rescue agent, 2026-05-13) made these changes to this document:
+
+- **Scoped v1.0 to Surface A only.** Surface B (`mcp`, `sync`, `capture`, `search` production-ready) ships in `v1.1-omnus-connected`. Decouples the OSS wedge from Omnus's multi-tenant work.
+- **Phase 01 scope narrowed.** Surface B commands keep their existing implementations and show a "beta — see v1.1" notice. The mock-API smoke test is v1.0; production integration is v1.1.
+- **Sync-point table updated.** The `terso mcp` → Omnus Phase 01 dependency now points at v1.1, not v1.0. This was the highest-leverage structural change.
+
+What was **considered but not applied**:
+
+- Codex suggested cutting Phase 05 distribution to "Homebrew + awesome-lists + one agent-tool outreach" only (defer Chocolatey/Scoop/Docker). Decision: keep the broader list but treat Chocolatey/Docker as stretch goals that drop first if time pressures. Already implicit in the SPEC's Out-of-scope and risk sections.
+- Codex suggested reducing Phase 07 from 5 launch posts to 1 great + cadence. Decision: keep the 5-post target but mark posts 4 and 5 as drafted-not-shipped at milestone close (they ship in launch window weeks 2 and 4). The pipeline matters; the volume is realistic.
+
 ## Last revised
 
-2026-05-13 — Initial creation. Codex strategic review pending.
+2026-05-13 — Initial creation, then revised same-day after Codex strategic review.

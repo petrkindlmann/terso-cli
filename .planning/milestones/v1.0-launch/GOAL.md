@@ -1,8 +1,10 @@
-# Milestone Goal — `v1.0-launch`
+# Milestone Goal — `v1.0-launch` (Surface A only)
 
-> Ship a polished, trustworthy, broadly discoverable Terso CLI v1.0 that drives Omnus signups, becomes the obvious tool for the AGENTS.md format, and plants the seeds of long-term virality in the AI-coding-tools community.
+> Ship a polished, trustworthy, broadly discoverable Terso CLI v1.0 — **offline-only surface** — that drives Omnus signups, becomes the obvious tool for the AGENTS.md format, and plants the seeds of long-term virality in the AI-coding-tools community.
 
 This is the **specific, falsifiable definition of done** for this milestone. Every phase SPEC in `phases/` exists to satisfy at least one bullet here.
+
+> **Codex Round 1 Review Applied (2026-05-13):** the milestone is scoped to **Surface A only** (offline `terso emit` + `emit --check` + docs + CI + GitHub Action). Surface B (`mcp`, `sync`, `capture`, `search` against production Omnus) ships in a separate follow-on milestone `v1.1-omnus-connected` so the OSS wedge is not blocked on Omnus's multi-tenant work. Acceptance criteria below that reference Surface B are marked as **[v1.1]** and excluded from milestone closure.
 
 ---
 
@@ -22,7 +24,7 @@ This is the **specific, falsifiable definition of done** for this milestone. Eve
 - [ ] **`terso doctor` exits 0 on a healthy install** and produces an actionable diagnostic on a broken one.
 - [ ] **`--version` reports the actual installed version**, not a hard-coded string.
 - [ ] **`emit --check`** is a stable CI primitive: same input → same exit code across machines and OSes.
-- [ ] **MCP server (`terso mcp`)** exposes the three tools specified in `docs/11-cli-agent-integration.md`. Works against an authenticated Omnus account and reports a clean error when auth is missing.
+- [ ] **[v1.1]** MCP server (`terso mcp`) exposes the three tools specified in `docs/11-cli-agent-integration.md`. Works against an authenticated Omnus account and reports a clean error when auth is missing. *Deferred from milestone closure; tracked in v1.1-omnus-connected.*
 
 ### Quality bar
 
@@ -56,8 +58,8 @@ This is the **specific, falsifiable definition of done** for this milestone. Eve
 ### Funnel to Omnus
 
 - [ ] **The README has a clear, non-spammy bridge** to Omnus: "Connect to Omnus for hosted knowledge memory" with a single link.
-- [ ] **`terso auth` flow is friction-light** — magic link or OAuth-style; no manual token-paste unless that's the only option.
-- [ ] **Conversion event tracked** with consent, ideally via Omnus signup attribution (referrer / install-source param), so the CLI→Omnus funnel is measurable. Acceptable: a simple `?source=terso-cli` param on the signup CTA.
+- [ ] **[v1.1]** `terso auth` flow is friction-light — magic link or OAuth-style; no manual token-paste unless that's the only option. *Deferred to v1.1-omnus-connected.*
+- [ ] **Conversion event tracked** with consent, ideally via Omnus signup attribution (referrer / install-source param), so the CLI→Omnus funnel is measurable. Acceptable: a simple `?source=terso-cli` param on the signup CTA. *Implementable in Surface A; this is just the URL parameter.*
 
 ### Viral seed
 
@@ -91,6 +93,18 @@ This is the **specific, falsifiable definition of done** for this milestone. Eve
 - It does not claim CLI revenue. The CLI is free forever (per non-goal).
 - It does not claim coverage of every agent client. Top-5 well > top-30 poorly.
 - It does not claim a perfect repo. It claims a repo that an experienced OSS maintainer would respect.
+- **It does not claim** that `terso mcp` / `sync` / `capture` / `search` are production-ready against the public Omnus instance. Those are Surface B, deferred to v1.1-omnus-connected. v1.0 ships Surface A only.
+- **It does not claim** "viral" outcomes. The prior "talk of dev-tools Twitter for a week" framing was not falsifiable and has been removed; replaced with countable proxies (GitHub stars, npm downloads, awesome-list inclusions, named-voice acknowledgments).
+
+---
+
+## Codex strategic review applied
+
+Round 1 of cross-AI review (Codex, via codex-rescue agent, 2026-05-13) made these changes to this document:
+
+- Scoped the milestone to Surface A only. Surface B criteria marked **[v1.1]** and deferred.
+- Removed unfalsifiable phrases ("talk of dev-tools Twitter"). Trailing-indicator counts retained as honest measurement.
+- Clarified the Omnus signup-attribution requirement is Surface A scope (just a URL parameter).
 
 ---
 
