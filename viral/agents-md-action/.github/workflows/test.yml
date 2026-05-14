@@ -1,0 +1,29 @@
+name: self-test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+
+      - name: Stage a fixture repo
+        run: |
+          mkdir fixture && cd fixture
+          printf '# AGENTS\n\n## Project rules\n\nUse pnpm.\n' > AGENTS.md
+          git init -q
+      - name: Run action against fixture (should pass)
+        uses: ./
+        with:
+          require-sections: 'Project rules'
+        # The action only inspects the working tree; we cd into fixture by
+        # invoking it from there.
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}/fixture

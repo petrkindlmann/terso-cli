@@ -1,0 +1,85 @@
+name: 'AGENTS.md check'
+description: 'Lint AGENTS.md and gate drift between it and per-agent config files (CLAUDE.md, .cursorrules, etc.).'
+author: 'Petr Kindlmann'
+branding:
+  icon: 'check-circle'
+  color: 'purple'
+
+inputs:
+  terso-version:
+    description: 'terso-cli version to install (semver range or "latest").'
+    default: 'latest'
+    required: false
+  targets:
+    description: 'Comma-separated subset of emit targets to check. Default: auto-detect from repo.'
+    default: ''
+    required: false
+  require-sections:
+    description: 'Comma-separated H2 headings AGENTS.md must include. Empty disables the lint.'
+    default: ''
+    required: false
+  fail-on-missing:
+    description: 'Fail the check if AGENTS.md does not exist (true|false).'
+    default: 'true'
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Install terso-cli
+      shell: bash
+      run: |
+        if [ "${{ inputs.terso-version }}" = "latest" ]; then
+          npm install -g terso-cli
+        else
+          npm install -g "terso-cli@${{ inputs.terso-version }}"
+        fi
+
+    - name: Lint AGENTS.md
+      shell: bash
+      env:
+        REQUIRE_SECTIONS: ${{ inputs.require-sections }}
+        FAIL_ON_MISSING: ${{ inputs.fail-on-missing }}
+      run: |
+        set -euo pipefail
+        if [ ! -f AGENTS.md ]; then
+          if [ "$FAIL_ON_MISSING" = "true" ]; then
+            echo "::error file=AGENTS.md::AGENTS.md not found at repo root."
+            exit 1
+          fi
+          echo "::warning::AGENTS.md not found; skipping lint (fail-on-missing=false)."
+          exit 0
+        fi
+
+        if [ -z "$REQUIRE_SECTIONS" ]; then
+          echo "No section requirements set; skipping section lint."
+          exit 0
+        fi
+
+        missing=0
+        IFS=',' read -ra sections <<< "$REQUIRE_SECTIONS"
+        for s in "${sections[@]}"; do
+          s_trimmed="$(echo "$s" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          if [ -z "$s_trimmed" ]; then continue; fi
+          if ! grep -qE "^## *$s_trimmed( |$)" AGENTS.md; then
+            echo "::error file=AGENTS.md::Missing required H2 section: $s_trimmed"
+            missing=$((missing + 1))
+          fi
+        done
+        if [ "$missing" -gt 0 ]; then
+          exit 1
+        fi
+        echo "All required sections present."
+
+    - name: Drift check via terso emit --check
+      shell: bash
+      env:
+        TARGETS: ${{ inputs.targets }}
+        TERSO_SUPPRESS_BETA_NOTICE: '1'
+      run: |
+        set -euo pipefail
+        if [ -n "$TARGETS" ]; then
+          terso emit --check --targets "$TARGETS"
+        else
+          terso emit --check
+        fi
