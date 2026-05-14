@@ -1,0 +1,7 @@
+# Sponsorship for terso-cli is consolidated under the Omnus organization, which
+# pays for ongoing maintenance of the CLI. Direct contributions to Omnus's free
+# tier (omnus.dev) keep the OSS work funded.
+#
+# If you want to sponsor the CLI specifically, open an issue — we'll set up a
+# GitHub Sponsors profile if there's demand.
+custom: ["https://omnus.dev"]

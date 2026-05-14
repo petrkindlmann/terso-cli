@@ -1,0 +1,33 @@
+name: Feature request
+description: Suggest an improvement to terso-cli.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: A clear, concise description of the pain. Not the proposed solution.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: How you imagine terso could solve this. CLI shape, flag names, output.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+      description: Hand-rolled scripts, other tools, existing terso flags.
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Which surface?
+      options:
+        - Surface A — offline emit, no Omnus
+        - Surface B — Omnus-connected (mcp / sync / capture / search)
+        - Not sure
+    validations:
+      required: true

@@ -1,0 +1,22 @@
+name: Question
+description: Ask how to use terso-cli, or anything in the docs that's unclear.
+labels: [question]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before opening an issue, please skim [the troubleshooting guide](../blob/main/docs/troubleshooting.md)
+        and check [existing discussions](../../discussions). If your question is
+        clearly a feature request or bug report, please use those templates instead.
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: Be specific. Include commands you ran and what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What are you trying to accomplish? Which agent client?

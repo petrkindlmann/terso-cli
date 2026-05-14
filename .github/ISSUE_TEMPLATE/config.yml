@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security disclosure
+    url: mailto:security@omnus.dev
+    about: Report a security vulnerability privately, not as a public issue.
+  - name: Omnus account or billing
+    url: mailto:support@omnus.dev
+    about: terso-cli is open source. For Omnus account questions, email Omnus support.
