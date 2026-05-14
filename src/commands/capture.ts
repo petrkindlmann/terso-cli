@@ -4,16 +4,18 @@ import ora from 'ora';
 import { loadProjectConfig } from '../lib/config.js';
 import { OmnusApiClient } from '../lib/api-client.js';
 import { appendOfflineCapture, pendingCaptureCount } from '../lib/offline-store.js';
+import { BETA_LABEL, printBetaNotice } from '../lib/beta-notice.js';
 
 export function registerCaptureCommand(program: Command): void {
   program
     .command('capture [text]')
-    .description('Send a knowledge fragment to Omnus for processing')
+    .description(`${BETA_LABEL} Send a knowledge fragment to Omnus for processing`)
     .option('--scope <scope>', 'Scope hint: shared, project, personal, mixed')
     .option('--project <id>', 'Override project ID')
     .option('--clipboard', 'Capture from clipboard')
     .action(async (text: string | undefined, options) => {
       try {
+        printBetaNotice();
         await runCapture(text, options);
       } catch (error) {
         console.error('Capture failed:', error instanceof Error ? error.message : error);

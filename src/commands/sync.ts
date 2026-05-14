@@ -4,15 +4,17 @@ import { loadProjectConfig } from '../lib/config.js';
 import { OmnusApiClient } from '../lib/api-client.js';
 import { writeContextFiles } from '../lib/file-writer.js';
 import { readOfflineCaptures, clearOfflineCaptures, pendingCaptureCount } from '../lib/offline-store.js';
+import { BETA_LABEL, printBetaNotice } from '../lib/beta-notice.js';
 
 export function registerSyncCommand(program: Command): void {
   program
     .command('sync')
-    .description('Pull project context from Omnus and write to .terso/generated/')
+    .description(`${BETA_LABEL} Pull project context from Omnus and write to .terso/generated/`)
     .option('--force', 'Overwrite all files even if unchanged')
     .option('--dry-run', 'Show what would be written without writing')
     .action(async (options) => {
       try {
+        printBetaNotice();
         await runSync(options);
       } catch (error) {
         console.error('Sync failed:', error instanceof Error ? error.message : error);

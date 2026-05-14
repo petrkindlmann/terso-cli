@@ -11,6 +11,7 @@ import { registerCompileCommand } from './commands/compile.js';
 import { registerEmitCommand } from './commands/emit.js';
 import { registerMcpCommand } from './commands/mcp.js';
 import { registerAuthCommand } from './commands/auth.js';
+import { registerInstallHookCommand } from './commands/install-hook.js';
 
 const program = new Command();
 
@@ -30,5 +31,6 @@ registerCompileCommand(program);
 registerEmitCommand(program);
 registerMcpCommand(program);
 registerAuthCommand(program);
+registerInstallHookCommand(program);
 
 program.parse();

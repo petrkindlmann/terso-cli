@@ -26,13 +26,17 @@
   ],
   "files": [
     "dist",
-    "bin"
+    "bin",
+    "hooks/omnus-session-observer.sh",
+    "hooks/dist"
   ],
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
     "test": "vitest run",
     "test:watch": "vitest",
+    "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {

@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.0.0-rc.1 — 2026-05-14 (unreleased)
+
+### Added
+
+- **`terso install-hook`** — install the Omnus session-observer hook into Claude Code's
+  `settings.json`. Flags: `--client claude` (only supported client today), `--scope user|project`,
+  `--uninstall`, `--dry-run`. Idempotent — re-running is a no-op when the hook is already wired.
+- **Surface B beta notice** — `mcp`, `sync`, `capture`, `search`, `auth` now print a one-line
+  stderr notice ("Surface B (Omnus-connected) is in beta…") on first invocation per process.
+  Suppressable with `TERSO_SUPPRESS_BETA_NOTICE=1`. `--help` for each prefixed with `[beta v1.1]`.
+
+### Changed
+
+- **`terso emit --check` exit codes are now stable.** `0` = no changes, `1` = changes required,
+  `2` = error (missing AGENTS.md, unknown target, blocked write). Documented in `--help`. The
+  pre-1.0 behavior collapsed errors and drift into `1`.
+- **`terso --version` is now sourced from `package.json` at runtime.** Previously hard-coded.
+
 ## 0.3.0 — 2026-05-10
 
 ### Added

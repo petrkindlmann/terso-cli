@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { createMcpServer, defaultDeps } from '../lib/mcp-server.js';
+import { BETA_LABEL, printBetaNotice } from '../lib/beta-notice.js';
 
 type ClientId = 'claude' | 'cursor' | 'codex';
 
@@ -46,11 +47,12 @@ const CLIENT_CONFIGS: Record<ClientId, { label: string; configPath: string; exam
 export function registerMcpCommand(program: Command): void {
   const mcp = program
     .command('mcp')
-    .description('Run an MCP server exposing project context to AI agents');
+    .description(`${BETA_LABEL} Run an MCP server exposing project context to AI agents`);
 
   mcp
     .action(async () => {
       try {
+        printBetaNotice();
         await runServer();
       } catch (error) {
         console.error('MCP server failed:', error instanceof Error ? error.message : error);

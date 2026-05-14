@@ -1,10 +1,11 @@
 import { Command } from 'commander';
 import { loadGlobalConfig, saveGlobalConfig } from '../lib/config.js';
+import { BETA_LABEL } from '../lib/beta-notice.js';
 
 export function registerAuthCommand(program: Command): void {
   const auth = program
     .command('auth')
-    .description('Manage Omnus API authentication');
+    .description(`${BETA_LABEL} Manage Omnus API authentication`);
 
   auth
     .command('set')

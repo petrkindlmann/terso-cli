@@ -35,9 +35,9 @@ function read(rel: string): string {
 }
 
 describe('emit command', () => {
-  it('returns 1 and prints error when AGENTS.md is missing', async () => {
+  it('returns 2 and prints error when AGENTS.md is missing', async () => {
     const code = await runEmit({}, tmpRoot);
-    expect(code).toBe(1);
+    expect(code).toBe(2);
     expect(errors.join('\n')).toContain('AGENTS.md not found');
   });
 
@@ -81,7 +81,7 @@ describe('emit command', () => {
 
     const code = await runEmit({ targets: 'claude' }, tmpRoot);
 
-    expect(code).toBe(1);
+    expect(code).toBe(2);
     expect(errors.join('\n')).toContain('blocked');
     expect(read('CLAUDE.md')).toBe('# my hand-written file\n');
   });
@@ -164,7 +164,7 @@ describe('emit command', () => {
 
     const code = await runEmit({ targets: 'nope' }, tmpRoot);
 
-    expect(code).toBe(1);
+    expect(code).toBe(2);
     expect(errors.join('\n')).toContain('Unknown agent target');
   });
 

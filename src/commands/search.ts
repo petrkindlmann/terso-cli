@@ -2,16 +2,18 @@ import { Command } from 'commander';
 import ora from 'ora';
 import { loadProjectConfig } from '../lib/config.js';
 import { OmnusApiClient } from '../lib/api-client.js';
+import { BETA_LABEL, printBetaNotice } from '../lib/beta-notice.js';
 
 export function registerSearchCommand(program: Command): void {
   program
     .command('search <query>')
-    .description('Search knowledge base in Omnus')
+    .description(`${BETA_LABEL} Search knowledge base in Omnus`)
     .option('--scope <scope>', 'Filter by scope: shared, project, personal')
     .option('--kind <kind>', 'Filter by kind: fact, decision, procedure, etc.')
     .option('--limit <n>', 'Maximum results', '10')
     .action(async (query: string, options) => {
       try {
+        printBetaNotice();
         await runSearch(query, options);
       } catch (error) {
         console.error('Search failed:', error instanceof Error ? error.message : error);
