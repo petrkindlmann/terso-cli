@@ -2,6 +2,16 @@
 
 ## 1.0.0-rc.1 — 2026-05-14 (unreleased)
 
+### Quality
+
+- GitHub Actions CI: test + typecheck on Node 20 and 22 across Ubuntu, macOS, and Windows.
+- Coverage job (`vitest --coverage`) uploads an artifact on every push to main.
+- `npm audit --audit-level=high --omit=dev` gates merges.
+- Offline-emit import gate: CI fails if anything in the `emit` path imports network code.
+- CodeQL workflow runs on push and weekly.
+- Dependabot configured for weekly grouped npm + actions updates.
+- `RELEASE.md` documents the release process and semver decision tree.
+
 ### Added
 
 - **`terso install-hook`** — install the Omnus session-observer hook into Claude Code's

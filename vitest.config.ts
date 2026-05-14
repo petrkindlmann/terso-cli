@@ -5,5 +5,11 @@ export default defineConfig({
     globals: true,
     include: ['tests/**/*.test.ts'],
     restoreMocks: true,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html', 'lcov'],
+      include: ['src/**/*.ts'],
+      exclude: ['src/**/*.d.ts', 'src/index.ts'],
+    },
   },
 });
