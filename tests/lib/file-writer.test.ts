@@ -164,13 +164,15 @@ describe('writeContextFiles', () => {
       },
     ]);
 
-    // Should write to a temp file first
+    // Should write to a temp file first. Use the platform-appropriate
+    // separator so the assertion holds on Windows ("\tmp\") too.
     const tempPath = mockedFs.writeFileSync.mock.calls[0][0] as string;
-    expect(String(tempPath)).toContain('/tmp/');
+    const tmpSegment = `${path.sep}tmp${path.sep}`;
+    expect(String(tempPath)).toContain(tmpSegment);
 
     // Then rename to the final path
     expect(mockedFs.renameSync).toHaveBeenCalledWith(
-      expect.stringContaining('/tmp/'),
+      expect.stringContaining(tmpSegment),
       path.join('/projects/my-app', '.terso', 'generated', 'test.md')
     );
   });

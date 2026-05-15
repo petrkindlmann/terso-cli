@@ -26,10 +26,11 @@ function buildProgram(register: (p: Command) => void): Command {
   return program;
 }
 
-// ora spinner status symbols
-const OK = '✔'; // ✔
-const WARN = '⚠'; // ⚠
-const FAIL = '✖'; // ✖
+// ora spinner status symbols. Windows terminals fall back to ASCII glyphs
+// (√ ‼ ×) while macOS/Linux use the unicode set (✔ ⚠ ✖). Match either.
+const OK = /[✔√]/;
+const WARN = /[⚠‼]/;
+const FAIL = /[✖×]/;
 
 describe('doctor command', () => {
   let consoleLogs: string[];
@@ -94,7 +95,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const globalConfigLine = consoleLogs.find((l) => l.includes('Global config'));
-      expect(globalConfigLine).toContain(OK);
+      expect(globalConfigLine).toMatch(OK);
       expect(globalConfigLine).toContain('Found with API key');
     });
 
@@ -123,7 +124,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const globalConfigLine = consoleLogs.find((l) => l.includes('Global config'));
-      expect(globalConfigLine).toContain(WARN);
+      expect(globalConfigLine).toMatch(WARN);
       expect(globalConfigLine).toContain('no API key');
     });
 
@@ -149,7 +150,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const globalConfigLine = consoleLogs.find((l) => l.includes('Global config'));
-      expect(globalConfigLine).toContain(WARN);
+      expect(globalConfigLine).toMatch(WARN);
     });
   });
 
@@ -174,7 +175,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const projectInitLine = consoleLogs.find((l) => l.includes('Project init'));
-      expect(projectInitLine).toContain(OK);
+      expect(projectInitLine).toMatch(OK);
     });
 
     it('reports FAIL when .terso/ does not exist', async () => {
@@ -187,7 +188,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const projectInitLine = consoleLogs.find((l) => l.includes('Project init'));
-      expect(projectInitLine).toContain(FAIL);
+      expect(projectInitLine).toMatch(FAIL);
     });
   });
 
@@ -212,7 +213,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const apiLine = consoleLogs.find((l) => l.includes('API connectivity'));
-      expect(apiLine).toContain(OK);
+      expect(apiLine).toMatch(OK);
       expect(apiLine).toContain('Connected to');
     });
 
@@ -236,7 +237,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const apiLine = consoleLogs.find((l) => l.includes('API connectivity'));
-      expect(apiLine).toContain(FAIL);
+      expect(apiLine).toMatch(FAIL);
       expect(apiLine).toContain('Cannot reach API');
     });
   });
@@ -265,7 +266,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const gitignoreLine = consoleLogs.find((l) => l.includes('Git ignore'));
-      expect(gitignoreLine).toContain(OK);
+      expect(gitignoreLine).toMatch(OK);
     });
 
     it('reports WARN when .gitignore exists but does not exclude generated/', async () => {
@@ -291,7 +292,7 @@ describe('doctor command', () => {
       await program.parseAsync(['doctor'], { from: 'user' });
 
       const gitignoreLine = consoleLogs.find((l) => l.includes('Git ignore'));
-      expect(gitignoreLine).toContain(WARN);
+      expect(gitignoreLine).toMatch(WARN);
       expect(gitignoreLine).toContain('does not exclude generated/');
     });
   });
