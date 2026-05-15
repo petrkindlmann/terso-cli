@@ -1,0 +1,81 @@
+# terso-cli — project rules for AI coding agents
+
+> This is the canonical source. `terso emit` compiles it into `CLAUDE.md`,
+> `.cursorrules`, and `.github/copilot-instructions.md`. Edit this file, not
+> the generated ones.
+
+## What this project is
+
+`terso-cli` is a Node.js CLI published to npm as `terso-cli`. Two surfaces:
+
+- **Surface A** (`emit`, `init`, `doctor`, `install-hook`, `watch`, `status`,
+  `compile`) — offline, no network, no Omnus dependency. Ships v1.0.
+- **Surface B** (`mcp`, `sync`, `capture`, `search`, `auth`) — Omnus-connected,
+  beta. Production-ready in v1.1.
+
+The wedge is `terso emit`: one `AGENTS.md` compiles into every per-agent config
+file each AI coding agent expects.
+
+## Code conventions
+
+- TypeScript strict; `npm run typecheck` is gated in CI.
+- Commander for CLI parsing — don't migrate to a different framework.
+- Tests in `tests/` mirror `src/` layout. Use `vitest`.
+- Default to no comments. Only add one when the *why* is non-obvious.
+- No new runtime dependency without a strong reason. The published install
+  must stay tiny.
+- Follow existing patterns rather than introducing new ones.
+
+## Surface A invariants — never break these
+
+- **No network imports in the `emit` code path.** A CI grep gate enforces this;
+  if you import `OmnusApiClient`, `fetch`, `node:http`, or `node:net` into
+  `src/commands/emit.ts` or `src/lib/agent-targets.ts`, the build fails.
+- **`terso emit --check` exit codes are an API.** `0` = no changes, `1` =
+  changes required, `2` = error. Don't collapse them.
+- **`terso --version` reads from `package.json` at runtime.** Don't reintroduce
+  a hard-coded version string.
+
+## Surface B beta notice
+
+`mcp`, `sync`, `capture`, `search`, `auth` print a one-line stderr notice on
+first invocation per process. Suppressable via `TERSO_SUPPRESS_BETA_NOTICE=1`.
+Each command's `--help` description is prefixed with `[beta v1.1]`. Don't
+remove either until v1.1 ships.
+
+## Testing
+
+- `npm test` — single run.
+- `npm run typecheck` — type-only check.
+- `npx vitest run --coverage` — coverage report.
+- New commands and flags get a test in `tests/commands/`. New library code
+  goes in `tests/lib/`.
+
+## Cross-platform
+
+- Windows is in the CI matrix. Tests must not hardcode `/` path separators
+  or assume specific ora glyphs — Windows terminals fall back to `√ ‼ ×`
+  instead of `✔ ⚠ ✖`. Use `path.sep` and regex glyph alternation.
+
+## What ships where
+
+- `dist/` and `bin/` are the published runtime.
+- `hooks/omnus-session-observer.sh` and `hooks/dist/` are published so
+  `terso install-hook` can wire them into Claude Code.
+- `distribution/`, `viral/`, `.planning/`, `docs/agents/`, `content/` stay in
+  source — they're not published but live with the code.
+
+## Don'ts
+
+- No telemetry of any kind unless the user explicitly opts in.
+- No paid features inside the CLI. Paywalled features live behind Omnus auth.
+- No breaking `terso emit` output format without a deprecation window —
+  out-of-band escalation per RELEASE.md.
+- Don't rename the binary or package without an escalation.
+
+## Useful pointers
+
+- Spec for Surface B: `/Users/petr/projects/omnus/docs/11-cli-agent-integration.md`.
+- Milestone plan: `.planning/milestones/v1.0-launch/` (GOAL.md, ROADMAP.md, phases/).
+- Release process: `RELEASE.md`.
+- Contributing: `CONTRIBUTING.md`.

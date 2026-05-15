@@ -4,4 +4,21 @@ node-compile-cache/
 coverage/
 .terso/
 *.log
+*.tgz
 .DS_Store
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+
+# Env / secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Claude Code per-user local settings — never commit
+.claude/settings.local.json
+
+# Vitest cache
+.vitest-cache/

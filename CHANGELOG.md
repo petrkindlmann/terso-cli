@@ -2,6 +2,18 @@
 
 ## 1.0.0-rc.1 — 2026-05-14 (unreleased)
 
+### Project hygiene
+
+- `AGENTS.md` is now committed at the repo root — we eat our own dogfood;
+  `terso emit` regenerates `CLAUDE.md` from it.
+- `.gitignore` expanded to cover `.env*`, `.vscode/`, `.idea/`, `*.tgz`,
+  `.vitest-cache/`, and `.claude/settings.local.json` so contributors don't
+  accidentally commit per-user state.
+- Lockfile (`package-lock.json`) regenerated after adding the
+  `@vitest/coverage-v8` devDependency in Phase 02. CI matrix is green.
+- Two pre-existing Windows-only test bugs fixed (ora glyph fallback,
+  hardcoded `/tmp/` separator) so the cross-platform matrix passes.
+
 ### Quality
 
 - GitHub Actions CI: test + typecheck on Node 20 and 22 across Ubuntu, macOS, and Windows.
