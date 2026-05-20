@@ -1,0 +1,29 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  date: Date;
+  status: 'draft' | 'published';
+  tags: string[];
+  slug: string;
+}
+const { title, date, status, tags, slug } = Astro.props;
+const dateLabel = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+<BaseLayout title={`${title} — terso`} ogPath={`/blog/${slug}/`}>
+  <main>
+    <article>
+      <header>
+        <h1>{title}</h1>
+        <p class="meta">
+          <time datetime={date.toISOString()}>{dateLabel}</time>
+          {status === 'draft' && <span class="draft">DRAFT</span>}
+          {tags.length > 0 && <span> · {tags.join(', ')}</span>}
+        </p>
+      </header>
+      <slot />
+    </article>
+    <p style="margin-top:48px"><a href="/blog">← back to all posts</a></p>
+  </main>
+</BaseLayout>

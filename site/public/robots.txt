@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://terso.dev/sitemap-index.xml

@@ -48,7 +48,7 @@ Code's subagents likewise pick up whichever of `CLAUDE.md` /
 `.cursorrules` / Copilot instructions is in front of them. If those
 files have diverged, your machine reviewers and your human reviewers
 are working from different specs. See
-[*the multi-agent repo is already here*](multi-agent-repo) for what
+[*the multi-agent repo is already here*](/blog/multi-agent-repo/) for what
 that looks like when it bites.
 
 ## Exit codes

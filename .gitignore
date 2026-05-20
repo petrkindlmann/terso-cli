@@ -22,3 +22,10 @@ coverage/
 
 # Vitest cache
 .vitest-cache/
+
+# Astro site (site/)
+site/node_modules/
+site/dist/
+site/.astro/
+site/.env
+site/.env.*

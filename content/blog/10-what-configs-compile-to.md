@@ -117,7 +117,7 @@ authored where it applies. Compile what's central; keep local rules
 local.
 
 (For the longer argument, see
-[*the next config boundary is the folder, not the repo*](folder-config-boundary).)
+[*the next config boundary is the folder, not the repo*](/blog/folder-config-boundary/).)
 
 ## A short forward bet
 

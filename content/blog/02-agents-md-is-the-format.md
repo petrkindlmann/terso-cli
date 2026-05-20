@@ -96,7 +96,7 @@ apply only inside certain paths. `AGENTS.md` covers repo-wide truths;
 folder rules cover context-specific ones. They compose. `terso` doesn't
 try to emit folder rules; they're authored where they apply, not
 centralized. The longer version of that argument is in
-[*the next config boundary is the folder, not the repo*](folder-config-boundary).
+[*the next config boundary is the folder, not the repo*](/blog/folder-config-boundary/).
 
 ## What you can do today
 
