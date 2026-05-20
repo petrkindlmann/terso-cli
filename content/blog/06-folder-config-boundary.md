@@ -3,7 +3,7 @@ title: "The next config boundary is the folder, not the repo"
 date: 2026-06-18
 slug: folder-config-boundary
 tags: [agents-md, cursor, copilot, monorepo]
-status: draft
+status: published
 references:
   - https://cursor.com/docs (.cursor/rules/*.mdc)
   - https://docs.github.com/en/copilot ( .github/instructions/*.instructions.md)

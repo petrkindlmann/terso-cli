@@ -3,7 +3,7 @@ title: "AGENTS.md isn't a proposal anymore — it's the shared file"
 date: 2026-05-21
 slug: agents-md-shared-file
 tags: [agents-md, ai-coding, specification]
-status: draft
+status: published
 references:
   - https://agents.md/
   - https://github.com/agentsmd/agents.md

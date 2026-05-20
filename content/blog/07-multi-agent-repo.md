@@ -3,7 +3,7 @@ title: "The multi-agent repo is already here"
 date: 2026-06-25
 slug: multi-agent-repo
 tags: [ai-coding, agents-md, coordination]
-status: draft
+status: published
 references:
   - https://thenewstack.io/ai-coding-tool-stack/
   - https://duet.so/blog/claude-code-vs-cursor-vs-codex

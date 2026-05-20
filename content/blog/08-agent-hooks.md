@@ -3,7 +3,7 @@ title: "Agent hooks are the new shell profile"
 date: 2026-07-02
 slug: agent-hooks
 tags: [hooks, claude-code, install-hook, observability]
-status: draft
+status: published
 note: "install-hook is Surface A; the Omnus session observer it installs is beta (v1.1 GA)."
 ---
 

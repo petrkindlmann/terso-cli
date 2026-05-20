@@ -3,7 +3,7 @@ title: "MCP after the honeymoon: designing for the Tasks primitive"
 date: 2026-07-09
 slug: mcp-after-honeymoon
 tags: [mcp, terso, tasks, production]
-status: draft
+status: published
 note: "Surface B is beta in v1.0 — production-ready in v1.1-omnus-connected. This post sketches the v1.1 direction."
 references:
   - https://blog.modelcontextprotocol.io/posts/2026-mcp-roadmap/

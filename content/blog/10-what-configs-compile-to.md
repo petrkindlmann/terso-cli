@@ -3,7 +3,7 @@ title: "What agent configs should compile to in 2026"
 date: 2026-07-16
 slug: what-configs-compile-to
 tags: [agents-md, reference, comparison]
-status: draft
+status: published
 references:
   - https://agents.md/
   - https://developers.openai.com/codex/guides/agents-md

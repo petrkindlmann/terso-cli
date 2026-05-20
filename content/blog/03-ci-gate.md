@@ -3,7 +3,7 @@ title: "How to gate AI agent configs in CI with `terso emit --check`"
 date: 2026-05-28
 slug: ci-gate
 tags: [ci, terso, agents-md]
-status: draft
+status: published
 ---
 
 If two contributors edit `CLAUDE.md` and `.cursorrules` separately,

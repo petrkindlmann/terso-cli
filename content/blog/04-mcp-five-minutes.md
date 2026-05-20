@@ -3,7 +3,7 @@ title: "Three Terso tools over MCP — and the beta caveat"
 date: 2026-06-04
 slug: terso-mcp-three-tools
 tags: [mcp, terso, claude-code, cursor]
-status: draft
+status: published
 note: "Surface B (mcp) is in beta as of v1.0 — production-ready in v1.1."
 references:
   - https://blog.modelcontextprotocol.io/posts/2026-mcp-roadmap/
