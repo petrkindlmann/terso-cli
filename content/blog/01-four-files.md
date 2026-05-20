@@ -6,21 +6,18 @@ tags: [agents-md, ai-coding, cli]
 status: draft
 ---
 
-Last quarter I noticed my `.cursorrules` had drifted from my `CLAUDE.md`,
-which had drifted from my `.github/copilot-instructions.md`, which had drifted
-from the `AGENTS.md` I'd started keeping as the "real" source. Four files,
-roughly the same content, no canonical version.
+Last quarter I noticed my `.cursorrules` had diverged from my `CLAUDE.md`,
+which had diverged from my `.github/copilot-instructions.md`, which had
+diverged from the `AGENTS.md` I'd started keeping as the "real" source.
+Four files, roughly the same content, no canonical version.
 
-The drift wasn't dramatic. Nothing broken. But every time I touched one, I
-felt a faint moral obligation to touch the others. I never did, of course —
-that's how drift works.
+The divergence wasn't dramatic. Nothing broken. But every time I touched
+one, I felt a faint moral obligation to touch the others. I never did, of
+course — that's how this kind of rot works.
 
-Then I started shipping Terso.
+That small maintenance tax is the problem `terso-cli` exists to remove.
 
-## The wedge
-
-Terso CLI compiles one `AGENTS.md` into every per-agent config file your repo
-uses. It's offline, free, and works in 30 seconds:
+## What changes in 30 seconds
 
 ```sh
 npm install -g terso-cli
@@ -29,9 +26,9 @@ terso init       # scaffolds AGENTS.md if needed
 terso emit       # writes CLAUDE.md, .cursorrules, etc.
 ```
 
-That's it. `AGENTS.md` is the source. Everything else is compilation output.
+`AGENTS.md` becomes the source. Everything else is compilation output.
 
-## The marker
+## The marker comment that keeps you safe
 
 Each emitted file starts with a comment:
 
@@ -43,24 +40,33 @@ If you hand-edit one of those files, `terso emit` refuses to overwrite it
 without `--force`. So `terso` is safe to drop into a mature repo where
 `CLAUDE.md` was hand-written: it won't touch your file until you tell it to.
 
-## The CI gate
+## The CI flag that actually pays off
 
 The most useful flag isn't `emit` — it's `emit --check`:
 
 ```yaml
-- run: npx terso-cli emit --check
+- run: npx terso-cli@1 emit --check
 ```
 
 That fails the build if anyone hand-edits a per-agent file without updating
-the canonical `AGENTS.md`. Exit code `1` is the drift signal; exit code `2`
-is a real error. Use it in your CI workflow and drift becomes a review
-conversation, not a quarterly cleanup.
+`AGENTS.md`. Exit code `1` is the divergence signal; exit code `2` is a
+real error. Use it in CI and divergence becomes a review conversation,
+not a quarterly cleanup.
 
-## Why not just adopt AGENTS.md everywhere?
+## "But isn't AGENTS.md already standard now?"
 
-That's the long game. Codex CLI already reads `AGENTS.md` natively. The hope
-is that more agents follow. Until they do, the wedge is: write one file, emit
-everywhere.
+Mostly, yes — and that's why the wedge isn't "convince agents to read
+`AGENTS.md`." Codex, GitHub Copilot (native since August 2025), Cursor,
+Google's Jules and Gemini, Factory, Amp, Windsurf, Zed and RooCode all
+support it. The Agentic AI Foundation (Linux Foundation) now stewards
+the spec. Over 60,000 repos have an `AGENTS.md` today.
+
+The remaining mess is what I was living: the *other* files agents also
+read — `CLAUDE.md`, `.cursorrules`, `.github/copilot-instructions.md`,
+plus newer per-folder systems like `.cursor/rules/*.mdc` and
+`.github/instructions/*.instructions.md`. Some clients still default to
+those. Some teams have years of edits inside them. Compiling `AGENTS.md`
+into them is cheaper than asking every reviewer to memorize the matrix.
 
 ## Try it
 
@@ -69,4 +75,4 @@ npm install -g terso-cli
 terso emit
 ```
 
-Code: [github.com/petrkindlmann/terso-cli](https://github.com/petrkindlmann/terso-cli)
+Code: [github.com/petrkindlmann/terso-cli](https://github.com/petrkindlmann/terso-cli).

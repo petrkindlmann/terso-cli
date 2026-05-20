@@ -1,68 +1,112 @@
 ---
-title: "AGENTS.md is the format AI coding agents actually agree on"
+title: "AGENTS.md isn't a proposal anymore — it's the shared file"
 date: 2026-05-21
-slug: agents-md-format
+slug: agents-md-shared-file
 tags: [agents-md, ai-coding, specification]
 status: draft
+references:
+  - https://agents.md/
+  - https://github.com/agentsmd/agents.md
+  - https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/
+  - https://developers.openai.com/codex/guides/agents-md
 ---
 
-Every AI coding agent reads a different file:
+Eighteen months ago, every AI coding agent read a different file. Today
+most of them read the same one — and the ones that don't, point at it
+as a fallback. The argument worth having shifted: not "which file?"
+but "how do we keep all the *other* files in sync with `AGENTS.md` for
+the clients and contexts that still need them?"
 
-| Agent | File it reads |
-|---|---|
-| Claude Code | `CLAUDE.md` |
-| Cursor | `.cursorrules` (or `.cursor/rules/*.mdc`) |
-| GitHub Copilot | `.github/copilot-instructions.md` |
-| Codex CLI | `AGENTS.md` |
-| Aider | Whatever you `--read` |
-| Continue | A `systemMessage` in JSON config |
+## Where adoption actually is (May 2026)
 
-The first three are markdown files at the repo root. They differ in path, but
-not in shape — each is a project-level instruction file for an AI assistant.
-The content overlaps almost completely.
+- More than **60,000 repositories** ship an `AGENTS.md`, per the registry
+  the Agentic AI Foundation maintains.
+- Native support landed in OpenAI Codex, GitHub Copilot (August 2025),
+  Cursor, Google Jules/Gemini, Factory, Amp, Windsurf, Zed, and RooCode.
+- The format is now stewarded by the **Agentic AI Foundation under the
+  Linux Foundation**, after OpenAI contributed the spec.
+- The v1.1 proposal (issue #135 in the `agentsmd/agents.md` repo) focuses
+  on layering, discovery, and progressive disclosure — the gaps people
+  hit at scale, not new features.
 
-`AGENTS.md` is the format that emerged when teams started consolidating. It
-has no governing body, no spec, no committee. It's a Schelling point: the
-filename people picked when they wanted *one* canonical source.
+That changes the framing of what a tool around `AGENTS.md` is for. It's
+no longer "let's standardize." It's "let's make the standard cheap to
+adopt where the legacy files still live."
 
-## What AGENTS.md should contain
+## The "agents agree on `AGENTS.md`" table, post-standardization
 
-The convention I see most often:
+| Client | Reads `AGENTS.md` natively? | Other files it still reads |
+|---|---|---|
+| OpenAI Codex | Yes, primary input. | — |
+| GitHub Copilot | Yes (since Aug 2025). | `.github/copilot-instructions.md`, `.github/instructions/*.instructions.md` |
+| Cursor | Yes. | `.cursorrules`, `.cursor/rules/*.mdc` (per-folder) |
+| Claude Code | Imports it; reads `CLAUDE.md` natively. | `CLAUDE.md`, subdirectory `CLAUDE.md` files |
+| Google Jules / Gemini | Yes. | — |
+| Aider | Whatever you `--read`. | Any markdown you point it at. |
+| Continue | A `systemMessage` in JSON config. | — |
 
-1. **Project scope** — what this codebase does, two sentences.
-2. **Architecture** — high-level packages, where logic lives, what to ignore.
+The right-hand column is the work. Some are legacy files contributors
+edited for years. Some are new per-folder systems that don't replace
+`AGENTS.md` — they coexist with it. Either way, "the agent already
+reads `AGENTS.md`" doesn't make those files go away.
+
+## What an `AGENTS.md` should contain
+
+The GitHub Copilot team analyzed 2,500 high-signal `AGENTS.md` files and
+distilled them into a pattern. It maps to the categories I keep coming
+back to:
+
+1. **Project scope** — what the codebase does, in two sentences.
+2. **Architecture pointers** — where logic lives, which directories to
+   ignore.
 3. **Conventions** — testing patterns, commit style, branching rules.
 4. **Tools** — `pnpm` vs `npm`, formatter, linter, test runner.
 5. **Don'ts** — things the agent should never do (skip tests, edit
-   generated files, send telemetry, etc.).
+   generated files, send telemetry).
 
-If you want to go deeper, [the canonical AGENTS.md in our own repo][1] is a
-representative example.
+Public leaderboards report that repos with a curated `AGENTS.md`
+average **35–55% fewer agent-generated bugs** versus repos without one.
+The number to take with salt — sampling is uneven — but the direction
+is consistent across measurements.
 
-## Why a standalone spec hasn't (yet) happened
+## The compile model
 
-Standards by committee take years. The community has been doing the
-practical thing — converging on a filename and an approximate structure —
-without paperwork. Terso CLI's bet is that `terso emit` makes the format
-*sticky* by reducing the cost of adopting it.
+`AGENTS.md` is the source. Per-agent files are compilation output:
 
-If you maintain one of those per-agent files, your incremental cost is high:
-you have to edit several files in sync. If `AGENTS.md` is the source and
-everything else is compiled output, the format wins by default.
+```
+AGENTS.md  →  CLAUDE.md
+           →  .cursorrules
+           →  .github/copilot-instructions.md
+```
 
-## What about per-folder rules?
+`terso emit` does the compile. Each emitted file starts with a marker
+comment so re-emission is safe; the canonical `AGENTS.md` is the only
+file a human edits.
 
-Cursor's newer `.cursor/rules/*.mdc` system supports folder-scoped rules.
-That's outside the AGENTS.md convention today. Terso doesn't try to compete
-with it — use both. AGENTS.md for repo-wide truths; folder rules for
-context-specific ones.
+If your repo only uses Codex CLI, you can stop reading — `AGENTS.md`
+alone is enough. If anything *else* on the list still ships in your
+contributors' workflows (most teams), the per-agent files are the work
+`terso` removes.
+
+## Per-folder rules don't replace `AGENTS.md`
+
+Cursor's `.cursor/rules/*.mdc` and Copilot's
+`.github/instructions/*.instructions.md` add a second axis: rules that
+apply only inside certain paths. `AGENTS.md` covers repo-wide truths;
+folder rules cover context-specific ones. They compose. `terso` doesn't
+try to emit folder rules; they're authored where they apply, not
+centralized.
 
 ## What you can do today
 
-1. Move your `CLAUDE.md` contents to `AGENTS.md`.
-2. Run `terso emit` to regenerate `CLAUDE.md` (and `.cursorrules`, and
-   `copilot-instructions.md`) from that single source.
+1. Move your `CLAUDE.md` / `.cursorrules` / Copilot instructions into
+   `AGENTS.md`. Deduplicate as you go.
+2. Run `terso emit` to regenerate the per-agent files from that one
+   source.
 3. Gate it in CI with `terso emit --check`.
-4. Commit. Move on.
+4. Commit, and go back to whatever you were doing.
+
+The "standard" question is settled. The maintenance tax is the part
+that's still yours — and it shouldn't be.
 
 [1]: https://github.com/petrkindlmann/terso-cli/blob/main/AGENTS.md
