@@ -47,14 +47,27 @@ the 10-week launch window per the ROADMAP decision after Codex review.
 Each post carries a `references:` block in frontmatter pointing at
 sources from `content/REFERENCES.md`.
 
+## Publishing destinations
+
+- **Canonical home: `terso.dev/blog/<slug>/`** (Astro site under `site/`,
+  deployed to GitHub Pages on every push to `main`).
+- **Syndication primary: `dev.to`** with `canonical_url: https://terso.dev/blog/<slug>/`.
+- **Syndication secondary: `Hashnode`** with same canonical pointer.
+- **Optional reposts on omnus.dev/blog** when the topic ties directly to
+  the Omnus product (post 04 MCP install, post 09 MCP after honeymoon).
+  Carry canonical pointer back to terso.dev.
+
 ## Cross-promotion checklist (per post)
 
-- [ ] Cross-post to dev.to with canonical URL pointing at `omnus.dev/blog`.
-- [ ] Cross-post to Hashnode.
+- [ ] Flip `status: draft` → `status: published` in frontmatter.
+- [ ] Verify the day's `date:` is the real publish date.
+- [ ] Push to `main` — `deploy-site` workflow rebuilds terso.dev.
+- [ ] Cross-post to dev.to with `canonical_url: https://terso.dev/blog/<slug>/`.
+- [ ] Cross-post to Hashnode with same canonical pointer.
 - [ ] X thread with the post's core idea + link.
 - [ ] LinkedIn post with a different framing for that audience.
-- [ ] Drop into one relevant Discord (`#claude-code`, `#cursor`, etc.) with
-      context, not a copy-paste.
+- [ ] Drop into one relevant Discord (`#claude-code`, `#cursor`, etc.)
+      with context, not a copy-paste.
 
 ## Issue-response SLA reminder
 
