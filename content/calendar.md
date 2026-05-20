@@ -49,8 +49,12 @@ sources from `content/REFERENCES.md`.
 
 ## Publishing destinations
 
-- **Canonical home: `terso.dev/blog/<slug>/`** (Astro site under `site/`,
-  deployed to GitHub Pages on every push to `main`).
+- **Canonical home: `terso.dev/blog/<slug>/`** — served by
+  [`petrkindlmann/terso-site`](https://github.com/petrkindlmann/terso-site),
+  a Next.js app deployed via Cloudflare Workers + OpenNext. Drafts in
+  this repo at `content/blog/*.md` are the *source*; publishing means
+  porting them into `terso-site` (MDX under its `app/blog/` route or
+  similar) and running its deploy.
 - **Syndication primary: `dev.to`** with `canonical_url: https://terso.dev/blog/<slug>/`.
 - **Syndication secondary: `Hashnode`** with same canonical pointer.
 - **Optional reposts on omnus.dev/blog** when the topic ties directly to
@@ -59,9 +63,12 @@ sources from `content/REFERENCES.md`.
 
 ## Cross-promotion checklist (per post)
 
-- [ ] Flip `status: draft` → `status: published` in frontmatter.
-- [ ] Verify the day's `date:` is the real publish date.
-- [ ] Push to `main` — `deploy-site` workflow rebuilds terso.dev.
+- [ ] In `content/blog/<file>.md`: flip `status: draft` → `status: published`
+      and align `date:` with the real publish date.
+- [ ] Sync the post into `petrkindlmann/terso-site` (copy MDX, update its
+      content index).
+- [ ] In `terso-site`: `npm run build && npx opennextjs-cloudflare build && npx wrangler deploy`.
+- [ ] Verify the post renders at `https://terso.dev/blog/<slug>/`.
 - [ ] Cross-post to dev.to with `canonical_url: https://terso.dev/blog/<slug>/`.
 - [ ] Cross-post to Hashnode with same canonical pointer.
 - [ ] X thread with the post's core idea + link.

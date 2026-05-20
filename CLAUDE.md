@@ -20,8 +20,8 @@ file each AI coding agent expects.
 
 `AGENTS.md` itself is an open spec now stewarded by the **Agentic AI Foundation
 under the Linux Foundation** (60,000+ repos, native in Codex / Copilot / Cursor /
-Jules / Factory / Amp / Windsurf / Zed / RooCode as of May 2026). Terso's job
-is the per-agent files that still exist alongside it.
+Jules / Factory / Amp / Windsurf / Zed as of May 2026). Terso's job is the
+per-agent files that still exist alongside it.
 
 ## Code conventions
 
@@ -86,3 +86,9 @@ remove either until v1.1 ships.
 - Milestone plan: `.planning/milestones/v1.0-launch/` (GOAL.md, ROADMAP.md, phases/).
 - Release process: `RELEASE.md`.
 - Contributing: `CONTRIBUTING.md`.
+- **Marketing site**: terso.dev lives at `github.com/petrkindlmann/terso-site`
+  (Next.js + Cloudflare Workers + OpenNext). Blog drafts in `content/blog/`
+  are the source; publishing them means porting into `terso-site` and
+  deploying via `wrangler deploy`. Do NOT scaffold a parallel site in this
+  repo — see `/Users/petr/projects/deploy/deploy.md` for the canonical
+  deploy inventory.

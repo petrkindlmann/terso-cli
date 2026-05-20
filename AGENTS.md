@@ -84,3 +84,9 @@ remove either until v1.1 ships.
 - Milestone plan: `.planning/milestones/v1.0-launch/` (GOAL.md, ROADMAP.md, phases/).
 - Release process: `RELEASE.md`.
 - Contributing: `CONTRIBUTING.md`.
+- **Marketing site**: terso.dev lives at `github.com/petrkindlmann/terso-site`
+  (Next.js + Cloudflare Workers + OpenNext). Blog drafts in `content/blog/`
+  are the source; publishing them means porting into `terso-site` and
+  deploying via `wrangler deploy`. Do NOT scaffold a parallel site in this
+  repo — see `/Users/petr/projects/deploy/deploy.md` for the canonical
+  deploy inventory.
