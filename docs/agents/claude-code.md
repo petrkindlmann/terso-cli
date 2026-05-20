@@ -1,9 +1,10 @@
 # Claude Code
 
-> Last verified: 2026-05-14 against Claude Code 1.x.
+> Last verified: 2026-05-20 against Claude Code on Opus 4.7.
 
-Claude Code reads project rules from `CLAUDE.md` at the repo root. `terso emit`
-generates that file from your canonical `AGENTS.md`.
+Claude Code reads project rules from `CLAUDE.md` at the repo root (plus
+subdirectory `CLAUDE.md` files, which take precedence within their path).
+`terso emit` generates the root file from your canonical `AGENTS.md`.
 
 ## Setup
 
@@ -15,11 +16,20 @@ terso emit       # writes CLAUDE.md
 ```
 
 Commit `CLAUDE.md`. Claude Code picks it up automatically — no config change.
+Subdirectory rules stay hand-authored; terso doesn't compile to nested paths
+by design.
+
+## Subagents
+
+As of Opus 4.7, Claude Code formalized subagents — short-lived workers that
+can read the same project rules. They use the same `CLAUDE.md` Claude Code
+reads, so emitting once covers both the primary agent and any spawned
+subagents in the same session.
 
 ## CI gate
 
-```yaml
-- run: npx terso-cli emit --check --targets claude
+```sh
+- run: npx terso-cli@1 emit --check --targets claude
 ```
 
 ## MCP server *(beta — Omnus account required)*
@@ -40,4 +50,5 @@ terso install-hook --client claude
 ```
 
 Wires the Omnus session observer into `~/.claude/settings.json` so summarized
-sessions flow into your Omnus knowledge base.
+sessions flow into your Omnus knowledge base. Idempotent — re-running is a
+no-op when the hook is already installed.

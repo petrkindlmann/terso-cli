@@ -22,7 +22,7 @@ the clients and contexts that still need them?"
 - More than **60,000 repositories** ship an `AGENTS.md`, per the registry
   the Agentic AI Foundation maintains.
 - Native support landed in OpenAI Codex, GitHub Copilot (August 2025),
-  Cursor, Google Jules/Gemini, Factory, Amp, Windsurf, Zed, and RooCode.
+  Cursor, Google Jules/Gemini, Factory, Amp, Windsurf, and Zed.
 - The format is now stewarded by the **Agentic AI Foundation under the
   Linux Foundation**, after OpenAI contributed the spec.
 - The v1.1 proposal (issue #135 in the `agentsmd/agents.md` repo) focuses

@@ -8,7 +8,8 @@ Tracked here so future editors can verify facts before re-shipping. Frontmatter 
 |---|---|
 | AGENTS.md adopted by 60,000+ open-source projects | https://agents.md/ ; https://github.com/agentsmd/agents.md |
 | Stewarded by the Agentic AI Foundation (Linux Foundation); OpenAI contributed the spec | https://www.cdomagazine.tech/aiml/agentic-ai-foundation-launched-to-advance-open-standards |
-| Native AGENTS.md support in OpenAI Codex, GitHub Copilot (Aug 2025), Cursor, Jules/Gemini, Factory, Amp, Windsurf, Zed, RooCode | https://developers.openai.com/codex/guides/agents-md ; https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/ |
+| Native AGENTS.md support in OpenAI Codex, GitHub Copilot (Aug 2025), Cursor, Jules/Gemini, Factory, Amp, Windsurf, Zed | https://developers.openai.com/codex/guides/agents-md ; https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/ |
+| RooCode shut down its agent product on May 15, 2026 — drop from live-client tables | https://docs.roocode.com/ |
 | AGENTS.md v1.1 proposal — layering, discovery, progressive disclosure | https://github.com/agentsmd/agents.md/issues/135 |
 | 35–55% fewer agent-generated bugs in repos with curated AGENTS.md | Community leaderboards aggregated in https://agents.md/ and https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/ |
 
@@ -28,6 +29,16 @@ Tracked here so future editors can verify facts before re-shipping. Frontmatter 
 | Cursor Composer 2.5 shipped May 18 ($0.50/M in, $2.50/M out) | https://duet.so/blog/claude-code-vs-cursor-vs-codex |
 | Codex CLI: multi-day automations | https://duet.so/blog/claude-code-vs-cursor-vs-codex |
 | Antigravity 2.0 shipped May 19 — dynamic subagents, Antigravity CLI in Go, public SDK | https://lushbinary.com/blog/ai-coding-agents-comparison-cursor-windsurf-claude-copilot-kiro-2026/ |
+
+## Per-folder rule systems (May 2026)
+
+| Claim | Source |
+|---|---|
+| Cursor per-folder rules at `.cursor/rules/*.mdc`, glob-scoped via `globs:` frontmatter | https://docs.cursor.com/en/context |
+| Copilot per-path instructions at `.github/instructions/*.instructions.md`, scoped via `applyTo:` frontmatter | https://docs.github.com/en/copilot/reference/custom-instructions-support |
+| Antigravity 2.0 ships JSON-shaped hooks (May 19, 2026) | https://antigravity.google/blog/introducing-google-antigravity-2-0 |
+| Claude Code hooks specification | https://docs.anthropic.com/en/docs/claude-code/hooks |
+| MCP Tasks primitive — currently experimental, SEP-1686 | https://blog.modelcontextprotocol.io/posts/2026-mcp-roadmap/ |
 
 ## How to refresh
 

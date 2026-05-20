@@ -18,11 +18,15 @@ slugs and themes are stable.
 | Week 3 | 03 — CI gate | "Exit codes are an API" | reply: MCP discussion |
 | Week 4 | 04 — three Terso tools over MCP | "Trust model for local MCP servers" | reply: per-agent-config thread |
 | Week 5 | 05 — packaging and boundaries | "Why we shipped Surface A first" | reply: OSS launch thread |
-| Week 6 | feature: per-folder rules | "Cursor `.cursor/rules` + AGENTS.md" | reply: Cursor-specific thread |
-| Week 7 | feature: install-hook | "Send your Claude sessions to Omnus" | reply: Omnus signup thread |
-| Week 8 | retrospective: 8 weeks in | "Numbers from week 1 to 8" | reply: any future-of-AGENTS.md thread |
+| Week 6 | 06 — folder config boundary | "Cursor `.cursor/rules` vs Copilot `.github/instructions/`" | reply: monorepo agent thread |
+| Week 7 | 07 — multi-agent repo | "When the editor agent and the cloud agent disagree" | reply: multi-agent workflow thread |
+| Week 8 | 08 — agent hooks | "Agent hooks are the new shell profile" | reply: Antigravity hooks thread |
+| Week 9 | 09 — MCP after honeymoon | "MCP Tasks (SEP-1686) explained" | reply: MCP roadmap thread |
+| Week 10 | 10 — what configs compile to | "Compile vs author for per-folder rules" | reply: spec evolution thread |
 
 ## Drafted posts
+
+Launch window (weeks 1–5):
 
 - `content/blog/01-four-files.md`
 - `content/blog/02-agents-md-is-the-format.md`
@@ -30,8 +34,18 @@ slugs and themes are stable.
 - `content/blog/04-mcp-five-minutes.md`
 - `content/blog/05-shipping-a-cli.md`
 
-Posts 4 and 5 are drafted-not-shipped at milestone close; they ship in weeks 4
-and 5 of the launch window per the ROADMAP decision after Codex review.
+Post-launch deepening (weeks 6–10):
+
+- `content/blog/06-folder-config-boundary.md`
+- `content/blog/07-multi-agent-repo.md`
+- `content/blog/08-agent-hooks.md`
+- `content/blog/09-mcp-after-honeymoon.md`
+- `content/blog/10-what-configs-compile-to.md`
+
+Posts 4–10 are drafted-not-shipped at milestone close; they ship across
+the 10-week launch window per the ROADMAP decision after Codex review.
+Each post carries a `references:` block in frontmatter pointing at
+sources from `content/REFERENCES.md`.
 
 ## Cross-promotion checklist (per post)
 

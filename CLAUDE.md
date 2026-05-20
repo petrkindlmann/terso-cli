@@ -18,6 +18,11 @@
 The wedge is `terso emit`: one `AGENTS.md` compiles into every per-agent config
 file each AI coding agent expects.
 
+`AGENTS.md` itself is an open spec now stewarded by the **Agentic AI Foundation
+under the Linux Foundation** (60,000+ repos, native in Codex / Copilot / Cursor /
+Jules / Factory / Amp / Windsurf / Zed / RooCode as of May 2026). Terso's job
+is the per-agent files that still exist alongside it.
+
 ## Code conventions
 
 - TypeScript strict; `npm run typecheck` is gated in CI.

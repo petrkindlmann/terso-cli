@@ -57,9 +57,9 @@ not a quarterly cleanup.
 
 Mostly, yes — and that's why the wedge isn't "convince agents to read
 `AGENTS.md`." Codex, GitHub Copilot (native since August 2025), Cursor,
-Google's Jules and Gemini, Factory, Amp, Windsurf, Zed and RooCode all
-support it. The Agentic AI Foundation (Linux Foundation) now stewards
-the spec. Over 60,000 repos have an `AGENTS.md` today.
+Google's Jules and Gemini, Factory, Amp, Windsurf, and Zed all support
+it. The Agentic AI Foundation (Linux Foundation) now stewards the spec.
+Over 60,000 repos have an `AGENTS.md` today.
 
 The remaining mess is what I was living: the *other* files agents also
 read — `CLAUDE.md`, `.cursorrules`, `.github/copilot-instructions.md`,
