@@ -29,8 +29,8 @@ CI gate. Everything else is a link.
 ## 2. Offline-first commands cannot import network code
 
 `terso emit` works without an account, without a network call, and
-without Omnus. To keep that true under refactor pressure, the CI
-workflow grep-gates any network import (`OmnusApiClient`, `fetch`,
+without Omnus. To keep that true as the rest of the code evolves, the
+CI workflow grep-gates any network import (`OmnusApiClient`, `fetch`,
 `node:http`, `node:net`) in the `emit` code path. The first time
 someone unknowingly imports `api-client.ts` into a shared helper that
 `emit` also uses, the build fails. Cheap, structural, doesn't drift.

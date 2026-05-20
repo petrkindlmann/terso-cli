@@ -39,15 +39,17 @@ without updating `AGENTS.md`. The fix is one of:
 - Move the edit to `AGENTS.md` and re-run `terso emit` locally, or
 - Revert the per-agent edit and re-emit.
 
-## Why this matters in 2026
+## What's actually reading these files
 
-A lot more than humans read those files now. GitHub Copilot's code-review
+A lot more than humans now. GitHub Copilot's code-review
 mode and coding agent both consume the same repo-instruction files when
 they review a PR or open one. Cursor's background agents and Claude
 Code's subagents likewise pick up whichever of `CLAUDE.md` /
 `.cursorrules` / Copilot instructions is in front of them. If those
 files have diverged, your machine reviewers and your human reviewers
-are working from different specs.
+are working from different specs. See
+[*the multi-agent repo is already here*](multi-agent-repo) for what
+that looks like when it bites.
 
 ## Exit codes
 

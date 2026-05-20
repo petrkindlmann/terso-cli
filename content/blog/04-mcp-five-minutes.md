@@ -120,3 +120,7 @@ signed into Omnus, search and capture against shared knowledge. No
 protocol code, no per-client integration.
 
 The protocol is solved. The plumbing now is, too.
+
+> For where this is going next — what an MCP server needs to clear
+> before it stops being a demo — see
+> [*MCP after the honeymoon: designing for the Tasks primitive*](mcp-after-honeymoon).
