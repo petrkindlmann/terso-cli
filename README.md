@@ -60,13 +60,20 @@ v1.1. They work today against the Omnus development instance.
 | `--dry-run` | Show what would change without writing. |
 | `--force` | Overwrite files even if not marked terso-generated. |
 | `--watch` | Re-emit on every save of `AGENTS.md`. |
+| `--prune` | Delete terso-generated files for targets no longer active. |
 
-Default behavior emits only to targets whose presence hints exist in the repo
-(`.cursor/`, `CLAUDE.md`, `.github/`). On a fresh repo it writes all three.
+Target selection, in order: an explicit `--targets` flag wins; otherwise the
+`targets` list pinned in `.terso/project.json` at `terso init` time; otherwise
+auto-detection from presence hints (`.cursor/`, `CLAUDE.md`, `.github/`). When
+detection falls back to a partial set, `emit` prints a note naming the targets
+it skipped, so a teammate's missing `.cursor/` can't silently drop Cursor from
+the output. On a fresh repo with no hints, it writes all three.
 
 Each emitted file starts with a generated-by marker. `terso emit` refuses to
 overwrite hand-written files without `--force`, so it's safe to drop into a
-mature repo.
+mature repo. If you drop a target (or delete `AGENTS.md`), the stale generated
+file is flagged as an orphan; `terso emit --prune` removes it — but only files
+carrying the terso marker, never hand-written ones.
 
 ## CI gate
 
