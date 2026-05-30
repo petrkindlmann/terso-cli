@@ -10,6 +10,13 @@ its own repo for launch. The rest stay incubators here, or get archived.
 | Artifact | Status | Target home | Why it's here |
 |---|---|---|---|
 | `agents-md-action/` | **selected (v1.0)** | github.com/petrkindlmann/agents-md-action | GitHub Marketplace action that gates AGENTS.md drift in PRs. |
+| `terso-terminal.svg` | asset | terso.dev landing page | Animated (SMIL) terminal showing the emit → drift → re-emit CI-gate loop. |
+
+> **Render surface:** `terso-terminal.svg` uses SMIL `<animate>`, which GitHub
+> strips from rendered Markdown — it will appear frozen on the GitHub README.
+> Use it on the **terso.dev landing page** (browsers animate it). The GitHub
+> README hero stays `docs/demo.svg` (svg-term render of `docs/demo.cast`,
+> GitHub-safe). Both show identical, real CLI output.
 
 ## Why this directory?
 

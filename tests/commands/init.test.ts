@@ -86,6 +86,20 @@ describe('init command', () => {
     expect(written).toHaveProperty('verified');
   });
 
+  it('pins the detected agent targets in project.json', async () => {
+    const { registerInitCommand } = await importInit();
+    const program = buildProgram(registerInitCommand);
+
+    await program.parseAsync(['init'], { from: 'user' });
+
+    const projectJsonCall = mockedFs.writeFileSync.mock.calls.find(
+      (call) => String(call[0]).includes('project.json')
+    );
+    const written = JSON.parse(projectJsonCall![1] as string);
+    // No presence hints exist in this mocked fs, so init pins the full set.
+    expect(written.targets).toEqual(['claude', 'cursor', 'copilot']);
+  });
+
   it('writes .gitignore that excludes generated/', async () => {
     const { registerInitCommand } = await importInit();
     const program = buildProgram(registerInitCommand);

@@ -5,6 +5,7 @@ import ora from 'ora';
 import { detectProject } from '../lib/project-detector.js';
 import { loadGlobalConfig } from '../lib/config.js';
 import { OmnusApiClient } from '../lib/api-client.js';
+import { detectActiveTargets } from '../lib/agent-targets.js';
 
 const TERSO_DIR = '.terso';
 const GENERATED_DIR = 'generated';
@@ -107,12 +108,17 @@ async function runInit(options: InitOptions): Promise<void> {
   // Create directory structure
   fs.mkdirSync(generatedDir, { recursive: true });
 
+  // Pin the detected agent targets so `terso emit` writes the same set on every
+  // machine, rather than re-detecting from whatever local dirs happen to exist.
+  const detectedTargets = detectActiveTargets(cwd);
+
   // Write project config
   const projectConfig = {
     projectId,
     apiUrl,
     detectedFrom: detected.source,
     verified,
+    targets: detectedTargets.map((t) => t.id),
     createdAt: new Date().toISOString(),
   };
 
@@ -139,6 +145,8 @@ async function runInit(options: InitOptions): Promise<void> {
   if (agentsScaffolded) {
     console.log('  AGENTS.md:  scaffolded at project root');
   }
+  console.log(`  Pinned targets: ${detectedTargets.map((t) => t.id).join(', ')}`);
+  console.log('  Edit "targets" in .terso/project.json to change which agents terso writes.');
   console.log('');
   console.log('Next steps:');
   console.log('  terso emit    — compile AGENTS.md into per-agent config files');
