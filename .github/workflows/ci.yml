@@ -9,15 +9,41 @@ on:
 permissions:
   contents: read
 
+# Cancel superseded runs so rapid pushes don't stack up the full OS matrix.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  # Full 3-OS x 2-Node matrix only on main pushes (where cross-platform
+  # regressions actually ship). PRs run Linux + Node 22 only — macOS bills at
+  # 10x and Windows at 2x the Linux rate, so the cross-OS sweep on every WIP
+  # commit was the main cost driver.
+  matrix-config:
+    runs-on: ubuntu-latest
+    outputs:
+      os: ${{ steps.pick.outputs.os }}
+      node: ${{ steps.pick.outputs.node }}
+    steps:
+      - id: pick
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            echo 'os=["ubuntu-latest","macos-latest","windows-latest"]' >> "$GITHUB_OUTPUT"
+            echo 'node=[20,22]' >> "$GITHUB_OUTPUT"
+          else
+            echo 'os=["ubuntu-latest"]' >> "$GITHUB_OUTPUT"
+            echo 'node=[22]' >> "$GITHUB_OUTPUT"
+          fi
+
   test:
     name: test (node ${{ matrix.node }} / ${{ matrix.os }})
+    needs: matrix-config
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        node: [20, 22]
+        os: ${{ fromJSON(needs.matrix-config.outputs.os) }}
+        node: ${{ fromJSON(needs.matrix-config.outputs.node) }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
