@@ -1,6 +1,6 @@
 {
   "name": "terso-cli",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Compile a single AGENTS.md into CLAUDE.md, .cursorrules, Copilot instructions, and more. The CLI that keeps every AI coding agent on the same page.",
   "bin": {
     "terso": "./bin/terso.js"
